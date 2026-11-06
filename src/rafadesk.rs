@@ -13,8 +13,17 @@ pub fn apply() {
     overwrite.insert("relay-server".to_owned(), SERVER.to_owned());
     overwrite.insert("key".to_owned(), KEY.to_owned());
     drop(overwrite);
-    config::BUILTIN_SETTINGS
-        .write()
-        .unwrap()
-        .insert("hide-powered-by-me".to_owned(), "Y".to_owned());
+    let mut builtin = config::BUILTIN_SETTINGS.write().unwrap();
+    for k in [
+        "hide-powered-by-me",
+        "hide-network-settings",
+        "hide-server-settings",
+        "hide-proxy-settings",
+        "hide-websocket-settings",
+        "hide-remote-printer-settings",
+        "hide-stop-service",
+        "disable-change-id",
+    ] {
+        builtin.insert(k.to_owned(), "Y".to_owned());
+    }
 }

@@ -21,6 +21,10 @@ env:
 permissions:
   contents: write
 
+concurrency:
+  group: rafadesk-windows
+  cancel-in-progress: true
+
 jobs:
   generate-bridge:
     uses: ./.github/workflows/bridge.yml
