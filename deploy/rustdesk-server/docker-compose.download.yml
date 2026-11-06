@@ -1,0 +1,89 @@
+services:
+  fetch:
+    image: curlimages/curl:8.10.1
+    user: "0:0"
+    command:
+      - sh
+      - -c
+      - '[ -s /data/rustdesk-1.5.1-x86_64.exe ] || { curl -fL -o /data/rustdesk-1.5.1-x86_64.exe.part https://github.com/rustdesk/rustdesk/releases/download/1.5.1/rustdesk-1.5.1-x86_64.exe && mv -f /data/rustdesk-1.5.1-x86_64.exe.part /data/rustdesk-1.5.1-x86_64.exe; }'
+    volumes:
+      - ../files/download:/data
+    restart: "no"
+
+  web:
+    image: nginx:1.27-alpine
+    depends_on:
+      fetch:
+        condition: service_completed_successfully
+    volumes:
+      - ../files/download:/data:ro
+    configs:
+      - source: nginx_conf
+        target: /etc/nginx/conf.d/default.conf
+      - source: index_html
+        target: /usr/share/nginx/html/index.html
+    restart: unless-stopped
+
+configs:
+  nginx_conf:
+    content: |
+      server {
+        listen 80;
+        root /usr/share/nginx/html;
+        location = / { try_files /index.html =404; }
+        location = /RafaDesk.exe {
+          alias /data/rustdesk-1.5.1-x86_64.exe;
+          default_type application/octet-stream;
+          add_header Content-Disposition 'attachment; filename="RafaDesk-1.5.1-licensed-QfiUmbpxmbv5ybulGbvNmch1GblFmZhJnLvN3clNWYiojI5FGblJnIsISPzZkYQNWZyhlRDtSaoJHM5JFRFN0KxI3YEtiWzNmdGdjb4hTNEZTd2IkdxJiOikXZrJCLiUmbpxmbv5ybulGbvNmch1GblFmZhJnLvN3clNWYiojI0N3boJye.exe"';
+        }
+        location / { return 404; }
+      }
+  index_html:
+    content: |
+      <!doctype html>
+      <html lang="pt-BR">
+      <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>RafaDesk - Suporte remoto</title>
+      <link rel="icon" type="image/webp" href="data:image/webp;base64,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">
+      <style>
+        :root { color-scheme: light dark; --bg:#f4f4f5; --card:#fff; --fg:#211f1f; --muted:#5f5b5b; --accent:#2475b7; --accent-fg:#fff; --line:#e6e4e4; }
+        @media (prefers-color-scheme: dark) { :root { --bg:#121111; --card:#1c1b1b; --fg:#f2f0f0; --muted:#a8a3a3; --line:#2e2c2c; } }
+        * { box-sizing: border-box; }
+        body { margin:0; min-height:100vh; display:grid; place-items:center; padding:24px 16px; background:var(--bg); color:var(--fg); font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+        main { position:relative; overflow:hidden; width:100%; max-width:520px; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:32px 28px; }
+        main::before { content:""; position:absolute; inset:0 0 auto 0; height:5px; background:linear-gradient(90deg,#ff0000 0 33.3%,#ec9826 33.3% 66.6%,#2475b7 66.6%); }
+        header { display:flex; align-items:center; gap:14px; margin:0 0 20px; }
+        header img { width:56px; height:56px; flex:none; }
+        h1 { margin:0; font-size:26px; line-height:1.1; }
+        header small { display:block; color:var(--muted); font-size:14px; }
+        p.sub { margin:0 0 24px; color:var(--muted); }
+        a.btn { display:block; text-align:center; background:var(--accent); color:var(--accent-fg); text-decoration:none; font-weight:600; font-size:18px; padding:14px 20px; border-radius:10px; }
+        a.btn:hover { filter:brightness(1.08); }
+        .note { margin:8px 0 28px; text-align:center; color:var(--muted); font-size:13px; }
+        ol { margin:0; padding-left:22px; }
+        li { margin:0 0 10px; }
+        li strong { color:var(--fg); }
+        footer { margin-top:24px; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; }
+      </style>
+      </head>
+      <body>
+      <main>
+        <header>
+          <img src="data:image/webp;base64,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" alt="" width="56" height="56">
+          <div><h1>RafaDesk</h1><small>Rafa Consultoria em TI</small></div>
+        </header>
+        <p class="sub">Suporte remoto. Baixe, abra e passe o ID e a senha para o técnico.</p>
+        <a class="btn" href="/RafaDesk.exe">Baixar para Windows</a>
+        <p class="note">Não precisa instalar. Não renomeie o arquivo baixado.</p>
+        <ol>
+          <li>Clique em <strong>Baixar para Windows</strong>.</li>
+          <li>Abra o arquivo baixado. Se o Windows avisar, clique em <strong>Mais informações → Executar assim mesmo</strong>.</li>
+          <li>Informe ao técnico o <strong>ID</strong> e a <strong>senha</strong> que aparecem na tela.</li>
+          <li>Quando ele conectar, clique em <strong>Aceitar</strong>.</li>
+        </ol>
+        <footer>Rafa Consultoria em TI</footer>
+      </main>
+      </body>
+      </html>
