@@ -9,6 +9,10 @@ on:
       - "deploy/**"
       - "docs/**"
       - "README.md"
+      - "flutter/android/**"
+      - ".github/workflows/rafadesk-android.yml"
+      - ".github/workflows/rafadesk-linux.yml"
+      - ".github/workflows/rafadesk-windows.yml"
 
 env:
   RUST_VERSION: "1.75"
