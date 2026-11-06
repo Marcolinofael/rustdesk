@@ -9,6 +9,9 @@ on:
       - "deploy/**"
       - "docs/**"
       - "README.md"
+      - "res/rafadesk/**"
+      - ".github/workflows/rafadesk-linux.yml"
+      - ".github/workflows/rafadesk-windows.yml"
 
 env:
   SCITER_RUST_VERSION: "1.75"
