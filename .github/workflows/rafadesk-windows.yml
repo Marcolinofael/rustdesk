@@ -116,6 +116,8 @@ jobs:
         run: |
           python3 .\build.py --portable --flutter --skip-portable-pack --hwcodec --vram
           mv ./flutter/build/windows/x64/runner/Release ./rustdesk
+          # The installer looks for <app name>.exe in the install folder.
+          Rename-Item ./rustdesk/rustdesk.exe RafaDesk.exe
 
           Invoke-WebRequest -Uri https://github.com/rustdesk-org/rdev/releases/download/usbmmidd_v2/usbmmidd_v2.zip -OutFile usbmmidd_v2.zip
           Expand-Archive usbmmidd_v2.zip -DestinationPath .
@@ -141,7 +143,7 @@ jobs:
           sed -i '/dpiAware/d' res/manifest.xml
           pushd ./libs/portable
           pip3 install -r requirements.txt
-          python3 ./generate.py -f ../../rustdesk/ -o . -e ../../rustdesk/rustdesk.exe
+          python3 ./generate.py -f ../../rustdesk/ -o . -e ../../rustdesk/RafaDesk.exe
           popd
           mkdir -p ./output
           mv ./target/release/rustdesk-portable-packer.exe ./output/RafaDesk-${{ env.VERSION }}.exe
