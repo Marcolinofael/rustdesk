@@ -5,9 +5,9 @@
 # Usage: rebrand-deb.sh <input.deb> <output.deb> <icon-256.png>
 set -euo pipefail
 
-IN="$1"
-OUT="$2"
-ICON="$3"
+IN="$(realpath "$1")"
+OUT="$(realpath -m "$2")"
+ICON="$(realpath "$3")"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 
