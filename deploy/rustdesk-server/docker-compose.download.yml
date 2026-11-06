@@ -5,7 +5,7 @@ services:
     command:
       - sh
       - -c
-      - '[ -s /data/rustdesk-1.5.1-x86_64.exe ] || { curl -fL -o /data/rustdesk-1.5.1-x86_64.exe.part https://github.com/rustdesk/rustdesk/releases/download/1.5.1/rustdesk-1.5.1-x86_64.exe && mv -f /data/rustdesk-1.5.1-x86_64.exe.part /data/rustdesk-1.5.1-x86_64.exe; }'
+      - 'F=/data/RafaDesk-1.5.1.exe; echo "24dd149d5bf0597b728e1746b29587228d78253e2942bf89c08c0530fd48ec97  $$F" > /tmp/sum; sha256sum -c /tmp/sum >/dev/null 2>&1 || { curl -fL -o $$F.part https://github.com/Marcolinofael/rustdesk/releases/download/rafadesk-1.5.1/RafaDesk-1.5.1.exe && mv -f $$F.part $$F && sha256sum -c /tmp/sum; }'
     volumes:
       - ../files/download:/data
     restart: "no"
@@ -32,9 +32,9 @@ configs:
         root /usr/share/nginx/html;
         location = / { try_files /index.html =404; }
         location = /RafaDesk.exe {
-          alias /data/rustdesk-1.5.1-x86_64.exe;
+          alias /data/RafaDesk-1.5.1.exe;
           default_type application/octet-stream;
-          add_header Content-Disposition 'attachment; filename="RafaDesk-1.5.1-licensed-QfiUmbpxmbv5ybulGbvNmch1GblFmZhJnLvN3clNWYiojI5FGblJnIsISPzZkYQNWZyhlRDtSaoJHM5JFRFN0KxI3YEtiWzNmdGdjb4hTNEZTd2IkdxJiOikXZrJCLiUmbpxmbv5ybulGbvNmch1GblFmZhJnLvN3clNWYiojI0N3boJye.exe"';
+          add_header Content-Disposition 'attachment; filename="RafaDesk-1.5.1.exe"';
         }
         location / { return 404; }
       }
@@ -90,7 +90,7 @@ configs:
         <h2>Suporte <span class="grad">remoto</span></h2>
         <p class="sub">Baixe, abra e passe o ID e a senha para o técnico.</p>
         <a class="btn" href="/RafaDesk.exe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>Baixar para Windows</a>
-        <p class="note">Não precisa instalar. Não renomeie o arquivo baixado.</p>
+        <p class="note">Não precisa instalar para receber suporte.</p>
         <ol>
           <li>Clique em <strong>Baixar para Windows</strong>.</li>
           <li>Abra o arquivo baixado. Se o Windows avisar, clique em <strong>Mais informações → Executar assim mesmo</strong>.</li>
