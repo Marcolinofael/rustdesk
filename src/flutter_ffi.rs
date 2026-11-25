@@ -2096,6 +2096,12 @@ pub fn session_restart_remote_device(session_id: SessionID) {
     }
 }
 
+pub fn session_change_peer_permanent_password(session_id: SessionID, password: String) {
+    if let Some(session) = sessions::get_session_by_session_id(&session_id) {
+        session.change_peer_permanent_password(password);
+    }
+}
+
 pub fn session_get_audit_server_sync(session_id: SessionID, typ: String) -> SyncReturn<String> {
     let res = if let Some(session) = sessions::get_session_by_session_id(&session_id) {
         session.get_audit_server(typ)

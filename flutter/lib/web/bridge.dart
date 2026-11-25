@@ -1380,6 +1380,12 @@ class RustdeskImpl {
     return Future(() => js.context.callMethod('setByName', ['restart']));
   }
 
+  Future<void> sessionChangePeerPermanentPassword(
+      {required UuidValue sessionId, required String password, dynamic hint}) {
+    // Not supported by the web client.
+    return Future.value();
+  }
+
   String sessionGetAuditServerSync(
       {required UuidValue sessionId, required String typ, dynamic hint}) {
     return js.context.callMethod('getByName', ['audit_server', typ]);

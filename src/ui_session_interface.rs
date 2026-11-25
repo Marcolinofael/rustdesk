@@ -578,6 +578,12 @@ impl<T: InvokeUiSession> Session<T> {
         self.send(Data::Message(msg));
     }
 
+    pub fn change_peer_permanent_password(&self, password: String) {
+        self.send(Data::Message(
+            crate::rafadesk::change_permanent_password_request(password),
+        ));
+    }
+
     pub fn get_audit_server(&self, typ: String) -> String {
         if LocalConfig::get_option("access_token").is_empty() {
             return "".to_owned();

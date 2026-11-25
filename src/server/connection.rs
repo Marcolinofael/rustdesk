@@ -3968,6 +3968,13 @@ impl Connection {
                             }
                         }
                     }
+                    Some(misc::Union::ChangePermanentPassword(p)) => {
+                        if self.is_remote() && self.peer_keyboard_enabled() {
+                            let ok = crate::rafadesk::change_permanent_password(p).await;
+                            self.send(crate::rafadesk::change_permanent_password_result(ok))
+                                .await;
+                        }
+                    }
                     #[cfg(windows)]
                     Some(misc::Union::ElevationRequest(r)) => match r.union {
                         Some(elevation_request::Union::Direct(_)) => {

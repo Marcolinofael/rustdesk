@@ -872,6 +872,9 @@ message Misc {
     // is rebuilt, and held again, the next time it is shown, before any connection names it
     // by id again, so the shape just selected is always there to give.
     uint64 request_cursor_data = 39;
+    // RafaDesk: the controller sets the permanent password of the controlled device.
+    // A high number keeps it clear of fields upstream may add.
+    string change_permanent_password = 900;
   }
 }
 

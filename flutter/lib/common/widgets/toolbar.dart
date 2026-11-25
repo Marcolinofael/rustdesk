@@ -7,6 +7,7 @@ import 'package:flutter_hbb/common.dart';
 import 'package:flutter_hbb/common/shared_state.dart';
 import 'package:flutter_hbb/common/widgets/dialog.dart';
 import 'package:flutter_hbb/common/widgets/login.dart';
+import 'package:flutter_hbb/common/widgets/peer_password_dialog.dart';
 import 'package:flutter_hbb/consts.dart';
 import 'package:flutter_hbb/desktop/widgets/remote_toolbar.dart';
 import 'package:flutter_hbb/models/model.dart';
@@ -662,6 +663,15 @@ List<TTextMenu> toolbarControls(BuildContext context, String id, FFI ffi) {
           onPressed: () =>
               showRestartRemoteDevice(pi, id, sessionId, ffi.dialogManager),
           actionId: kShortcutActionRestartRemote),
+    );
+  }
+  // RafaDesk: change the permanent password of the controlled device
+  if (isDefaultConn && !ffiModel.viewOnly && ffiModel.keyboard) {
+    v.add(
+      TTextMenu(
+          child: Text(translate('Change client password')),
+          onPressed: () =>
+              showChangePeerPasswordDialog(id, sessionId, ffi.dialogManager)),
     );
   }
   // insertLock

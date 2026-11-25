@@ -826,5 +826,9 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("install-directory-not-empty-tip", "A pasta selecionada não está vazia. A instalação pode excluir dados existentes. Considere escolher outra pasta."),
         ("Request approval", "Solicitar aprovação"),
         ("Forever", "Para sempre"),
+        ("Change client password", "Alterar senha do cliente"),
+        ("Client password changed", "A senha do cliente foi alterada."),
+        ("Failed to change client password", "Não foi possível alterar a senha do cliente."),
+        ("change-client-password-tip", "Define a senha permanente do computador remoto. Use-a para reconectar se a conexão cair."),
     ].iter().cloned().collect();
 }
